@@ -35,4 +35,4 @@ An enterprise-grade, multi-page business intelligence application analyzing **1,
 - **Visual Design Paradigm:** Styled using high-level user-interface design principles—incorporating light flat canvases, structured container margins, and strict visual color-theory hierarchies.
 
 ---
-*Developed by Samson Mariita — Freelance Data Analyst & BI Consultant | Graduate Quantity Surveyor | Founder of Mariita Gallery*
+*Developed by Samson Mariita — Freelance Data Analyst & BI Consultant*

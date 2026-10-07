@@ -58,3 +58,27 @@ To support lightning-fast dashboard interactions, single-column and multi-layere
 The clean relational tables connect seamlessly to **Power BI**, structuring interactive visuals across the cleaned Kenyan commuter nodes:
 * **Market Distributions:** Tracking total structural supply over critical counties.
 * **Pricing Matrices:** Outlining clear financial trends separating standalone houses from growing high-rise developments.
+* ---
+
+## 🎨 Interactive Dashboard Showcase
+
+The frontend BI layer is split into three strategic reporting views designed for distinct stakeholder personas. Click on any dashboard preview to open it in full high-definition resolution:
+
+### 1. Executive Market Summary (Page 1)
+Aggregates core KPIs, total listing volume (1,308 properties), and high-level price spreads to provide an immediate market health baseline across major counties.
+<a href="power%20Bi%20Dashboard%20preview/PG%201.jpg" target="_blank">
+  <img src="power%20Bi%20Dashboard%20preview/PG%201.jpg" alt="Executive Summary" width="100%">
+</a>
+
+### 2. Advanced Statistical Analytics & Volatility Profile (Page 2)
+Tracks price frequency distributions, skewness index measurements (0.84), and standard deviation markers to expose how luxury outliers distort raw market averages.
+<a href="power%20Bi%20Dashboard%20preview/PG%202..jpg" target="_blank">
+  <img src="power%20Bi%20Dashboard%20preview/PG%202..jpg" alt="Advanced Statistical Analytics" width="100%">
+</a>
+
+### 3. Risk-Return & Structural Valuation Matrix (Page 3)
+Plots regional market volatility coefficients against median prices via a quad-scatter profile while hosting a multi-dimensional heatmap matrix tracking property types across bedroom configurations (4-10 bedrooms).
+<a href="power%20Bi%20Dashboard%20preview/PG%203.jpg" target="_blank">
+  <img src="power%20Bi%20Dashboard%20preview/PG%203.jpg" alt="Risk and Valuation Matrix" width="100%">
+</a>
+

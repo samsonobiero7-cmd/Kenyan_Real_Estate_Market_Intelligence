@@ -1,4 +1,4 @@
-# 🇰🇪 Kenyan Residential Market Intelligence: Enterprise BI Pipeline
+#  Kenyan Residential Market Intelligence: Enterprise BI Pipeline
 
 An end-to-end data engineering and business intelligence application capturing, processing, and analyzing **1,308 transactional real estate records** across primary Kenyan economic hubs (Nairobi, Kiambu County, Mombasa, Machakos, and Kajiado).
 

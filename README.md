@@ -1,38 +1,60 @@
-# 🏙️ Kenyan Residential Market Intelligence: Multi-Page Executive Application
+# 🇰🇪 Kenyan Residential Market Intelligence: Enterprise BI Pipeline
 
-An enterprise-grade, multi-page business intelligence application analyzing **1,308 transactional data records** across premium residential hubs in Kenya: **Nairobi**, **Kiambu**, **Mombasa/Coast**, **Kajiado**, and **Machakos**. This end-to-end data product transforms raw database tables into high-fidelity visual indicators to monitor regional supply densities, asset valuations, and structural pricing risks.
-
----
-
-## 🎯 Business Problems Solved & Strategic Insights
-* **True Inventory Visibility:** Cleaned and engineered transactional records to accurately map exactly **1,308 active listings** across 5 target clusters without duplicate counts.
-* **Isolating Premium Luxury Skews:** Mapped the critical delta between the **Average Market Price (Ksh 61.04M)** and the true **Median Market Price (Ksh 46.88M)**. This mathematical comparison proves that hyper-expensive luxury listings (primarily in Nairobi) heavily distort standard averages, helping investors isolate true middle-market values.
-* **Risk-Return Asset Velocity:** Engineered a custom **Market Volatility Coefficient** to cross-examine pricing stabilities. The dashboard instantly proves that Nairobi offers peak market values but carries high volatility, while Machakos offers a low-cost, highly stable entry point for development.
+An end-to-end data engineering and business intelligence application capturing, processing, and analyzing **1,308 transactional real estate records** across primary Kenyan economic hubs (Nairobi, Kiambu County, Mombasa, Machakos, and Kajiado).
 
 ---
 
-## 📊 Visual Architecture: The Three-Page Framework
-
-### 🔹 Page 1: Executive Inventory & Macro Price Benchmarking
-- **Inventory Metrics:** Aggregated inventory distributions using strict logical groupings (`Count of property_id`) to display accurate totals per city.
-- **Capital Intensity per Unit:** Tracks operational footprints by comparing the **Average Market Price** against **Cost per Bedroom** metrics.
-- **UI Layout:** Structured a balanced horizontal row of **5 unified deep-purple KPI cards** with high-contrast text for rapid, executive-level navigation.
-
-### 🔹 Page 2: Frequency Distributions & Statistical Volatility Profile
-- **Market Skewness Index (0.84):** Computes density distributions through custom Histograms, mathematically isolating real estate skews.
-- **Market Spread Tracking:** Utilizes automated trendlines, Interquartile Ranges (IQR), and variance parameters to evaluate systemic financial volatility.
-- **UI Layout:** Eliminated cluttered default axis text and subtitles to leave an elite, flat-canvas workspace.
-
-### 🔹 Page 3: Risk-Return Velocity Mapping & Segment Valuation Matrix
-- **Velocity Scatter Plot:** Plots dynamic regional nodes comparing median asset pricing structures directly against volatility thresholds to map asset velocities.
-- **Property Supply Matrix:** Leverages professional conditional heatmap formatting anchored to a unified plum/purple palette, letting stakeholders evaluate multi-bedroom configurations across different property types (Apartments, Villas, Townhouses, Standalone Houses) in seconds.
+## 🛠️ Tech Stack & Architecture
+* **Data Warehousing & ETL:** MySQL Server (Relational Database Design)
+* **Analytics & Visualization:** Power BI Desktop (`.pbix`)
+* **Core Language:** SQL (Advanced Data Manipulation, Aggregations, Performance Tuning)
 
 ---
 
-## 🛠️ The Technical Stack
-- **Database Architecture Layer:** MySQL (Data extraction, complex query groupings, data cleaning)
-- **Reporting Engine:** Microsoft Power BI Desktop & Advanced DAX Modeling
-- **Visual Design Paradigm:** Styled using high-level user-interface design principles—incorporating light flat canvases, structured container margins, and strict visual color-theory hierarchies.
+## ⚙️ Database Architecture & ETL Pipeline
+Rather than connecting Power BI directly to a messy raw data file, a full ETL pipeline was built in MySQL to build clean data models, implement advanced regex transformations, and protect query performance.
+
+### 1. Ingestion Layer
+Data is initially pulled into a non-relational `staging_houses` table using high-speed server file paths:
+```sql
+LOAD DATA INFILE "C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/houses-for-sale.csv"
+INTO TABLE staging_houses
+FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
+```
+
+### 2. Regex Feature Engineering & Type Conversion
+Messy real estate descriptions were split apart into clean relational data attributes. This process included categorizing property profiles via substring mappings, converting alphanumeric strings into pure numeric integers via `REGEXP_REPLACE`, and isolating bedroom quantities with `REGEXP_SUBSTR`:
+```sql
+CASE 
+    WHEN LOWER(title) LIKE '%villa%' THEN 'Villa'
+    WHEN LOWER(title) LIKE '%townhouse%' THEN 'Townhouse'
+    WHEN LOWER(title) LIKE '%apartment%' THEN 'Apartment'
+    ELSE 'Standalone House'
+END AS property_type,
+CAST(NULLIF(REGEXP_SUBSTR(title, '[0-9]+'), '') AS UNSIGNED) AS bedrooms,
+CAST(NULLIF(REGEXP_REPLACE(selling_price, '[^0-9]', ''), '') AS UNSIGNED) AS price_numeric
+```
+
+### 3. Spatial Parsing & Text Segmentation
+A major challenge was processing unformatted, single-string user location data. Using geometric string indexers (`SUBSTRING_INDEX`) and targeted conditional checks, unformatted locations were cleanly separated into three independent fields: `street_address`, `neighborhood`, and `region_city` to power geographic drill-downs inside the visual dashboard.
+
+```sql
+-- Isolating nested addresses safely by comma breaks
+street_address = CASE WHEN clean_location LIKE '%,%' THEN TRIM(SUBSTRING_INDEX(clean_location, ',', 1)) ELSE NULL END,
+neighborhood   = CASE WHEN clean_location LIKE '%,%' THEN TRIM(SUBSTRING_INDEX(clean_location, ',', -1)) ELSE TRIM(clean_location) END
+```
+
+### 4. Query Performance & Index Optimization
+To support lightning-fast dashboard interactions, single-column and multi-layered composite indexes were deployed. Query executions were continually verified using `EXPLAIN` cost matrices:
+* `idx_properties_location`: Speeds up deep location-based slicing (e.g., Kilimani vs. Ruaka).
+* `idx_properties_price`: Optimizes high-low pricing buckets.
+* `idx_properties_type_rooms`: A high-performance composite index matching real-world buyer filters (e.g., *3-Bedroom Apartments*).
 
 ---
-*Developed by Samson Mariita — Freelance Data Analyst & BI Consultant*
+
+## 📊 Business Intelligence Layer
+The clean relational tables connect seamlessly to **Power BI**, structuring interactive visuals across the cleaned Kenyan commuter nodes:
+* **Market Distributions:** Tracking total structural supply over critical counties.
+* **Pricing Matrices:** Outlining clear financial trends separating standalone houses from growing high-rise developments.
